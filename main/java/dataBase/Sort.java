@@ -3,9 +3,8 @@ package main.java.dataBase;
 
 import java.io.RandomAccessFile;
 import java.io.File;
-import java.io.IOException;
 
-import main.java.interfaces.Formats;
+import main.java.interfaces.Utility;
 
 //-----------------------------------------------------
 /*
@@ -76,7 +75,7 @@ public class Sort {
         /*
          * Final merge to sort all file.
         */
-        for (int i = 0; !Formats.singleFile(tmpFiles); setRecordsByBlock(getRecordsByBlock() * 2), i+=2) {
+        for (int i = 0; !Utility.singleFile(tmpFiles); setRecordsByBlock(getRecordsByBlock() * 2), i+=2) {
 
             intercalation(
             tmpFiles[i%getNumTmpFiles()],
@@ -90,7 +89,7 @@ public class Sort {
          * Transferring the file resulting from 
          * the merges to the original file used in the method.
         */
-        copyFileContent(Formats.lastFile(tmpFiles), source);
+        Utility.copyFileContent(Utility.lastFile(tmpFiles), source);
 
         /*
          * Method for delete all temporary files
@@ -167,7 +166,7 @@ public class Sort {
 
         int blockSize = getRecordsByBlock();
 
-        while (!Formats.EOF(firstFile) && !Formats.EOF(secondFile)) {
+        while (!Utility.EOF(firstFile) && !Utility.EOF(secondFile)) {
             
             int firstLimit = 0;
             int secondLimit = 0;
@@ -179,7 +178,7 @@ public class Sort {
             int[] recordSizes2 = new int[blockSize];
 
             //Read records from the first file.
-            while (firstLimit < blockSize && !Formats.EOF(firstFile)) {
+            while (firstLimit < blockSize && !Utility.EOF(firstFile)) {
                 recordSizes1[firstLimit] = firstFile.readInt();
                 long filePointer1 = firstFile.getFilePointer();
                 tmpRecords1[firstLimit] = Record.fromByteArray(firstFile, filePointer1);
@@ -187,7 +186,7 @@ public class Sort {
             }
 
             //Read records from the second file.
-            while (secondLimit < blockSize && !Formats.EOF(secondFile)) {
+            while (secondLimit < blockSize && !Utility.EOF(secondFile)) {
                 recordSizes2[secondLimit] = secondFile.readInt();
                 long filePointer2 = secondFile.getFilePointer();
                 tmpRecords2[secondLimit] = Record.fromByteArray(secondFile, filePointer2);
@@ -231,46 +230,13 @@ public class Sort {
         }
 
         //Copy any remaining data from the first file to the destination file.
-        copyRemainingData(firstFile, changerFile ? thirdFile : fourthFile);
+        Utility.copyRemainingData(firstFile, changerFile ? thirdFile : fourthFile);
         //Copy any remaining data from the second file to the destination file.
-        copyRemainingData(secondFile, changerFile ? thirdFile : fourthFile);
+        Utility.copyRemainingData(secondFile, changerFile ? thirdFile : fourthFile);
 
         //Set the length of the input files to zero as they are no longer needed.
         firstFile.setLength(0);
         secondFile.setLength(0);
-    }
-    /*
-     * Method for transfer data from
-     * one file to another.
-     * @param RandomAccessFile source -> source file that will be transfered.
-     * @param RandomAccessFile destination -> file that will receive transfered data.
-    */
-    private void copyRemainingData(RandomAccessFile source, RandomAccessFile destination) throws IOException {
-        while (!Formats.EOF(source)) { destination.write(source.read()); }
-    }
-    /*
-     * Method for copying content from a file with 
-     * a header to another.
-     * 
-     * @param RandomAccessFile source -> source that will be transfered
-     * @param RandomAccessFile destination -> destination of transference
-    */
-    private void copyFileContent(RandomAccessFile source, RandomAccessFile destination) throws Exception {
-
-        destination.seek(0);
-
-        int header = destination.readInt(); //Save the original header
-        source.seek(0);
-        source.writeInt(header);            //Write the original header into the final file
-        
-        //Copy the contents of the temporary file back to the original file
-        byte[] buffer = new byte[4096];
-        int bytesRead;
-        while ((bytesRead = source.read(buffer)) != -1) {
-            destination.write(buffer, 0, bytesRead);
-        }
-
-        source.close();
     }
 
     /*

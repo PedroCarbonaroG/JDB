@@ -25,7 +25,7 @@ import main.java.dataBase.Record;
 */
 //-----------------------------------------------------
 
-public abstract class Formats {
+public abstract class Utility {
 
     /*
      * Encoding used for printing and writing 
@@ -164,7 +164,7 @@ public abstract class Formats {
                 raf.skipBytes(2);
                 tmp.setName(raf.readUTF());
                 
-                tmp.setReleaseDate(Formats.convertToDate(raf.readUTF()));
+                tmp.setReleaseDate(Utility.convertToDate(raf.readUTF()));
 
                 /*
                 * Skipping 4 bytes for cleaning the String size for control
@@ -269,6 +269,41 @@ public abstract class Formats {
         for (RandomAccessFile file : files) { if (file.length() != 0) { tmp = file; } }
 
         return tmp;
+    }
+
+    /*
+     * Method for transfer data from
+     * one file to another.
+     * @param RandomAccessFile source -> source file that will be transfered.
+     * @param RandomAccessFile destination -> file that will receive transfered data.
+    */
+    public static void copyRemainingData(RandomAccessFile source, RandomAccessFile destination) throws IOException {
+        while (!Utility.EOF(source)) { destination.write(source.read()); }
+    }
+
+    /*
+     * Method for copying content from a file with 
+     * a header to another.
+     * 
+     * @param RandomAccessFile source -> source that will be transfered
+     * @param RandomAccessFile destination -> destination of transference
+    */
+    public static void copyFileContent(RandomAccessFile source, RandomAccessFile destination) throws Exception {
+
+        destination.seek(0);
+
+        int header = destination.readInt(); //Save the original header
+        source.seek(0);
+        source.writeInt(header);            //Write the original header into the final file
+        
+        //Copy the contents of the temporary file back to the original file
+        byte[] buffer = new byte[4096];
+        int bytesRead;
+        while ((bytesRead = source.read(buffer)) != -1) {
+            destination.write(buffer, 0, bytesRead);
+        }
+
+        source.close();
     }
 
     /*
