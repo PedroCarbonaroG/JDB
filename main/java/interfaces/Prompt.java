@@ -9,6 +9,7 @@ import java.nio.charset.StandardCharsets;
 
 import java.util.Scanner;
 
+import main.java.algorithms.LZW.LZW;
 import main.java.dataBase.Crud;
 import main.java.dataBase.Record;
 import main.java.dataBase.Sort;
@@ -40,10 +41,12 @@ public class Prompt {
     private static RandomAccessFile bTreeRaf;
     private static RandomAccessFile hashRaf;
     private static RandomAccessFile invertedListRaf;
+    private static RandomAccessFile lzwRaf;
     private File sequentialFile;
     private File bTreeFile;
     private File hashFile;
     private File invertedListFile;
+    private File lzwFile;
 
     /*
      * Application structures
@@ -57,6 +60,7 @@ public class Prompt {
     */
     Sort sort = new Sort();
     Crud crud = new Crud();
+    LZW lzw = new LZW();
 
     public void buildPrompt() throws Exception {
 
@@ -66,11 +70,13 @@ public class Prompt {
         bTreeRaf = new RandomAccessFile("main/resources/bTreeFile.bin", "rw");
         hashRaf = new RandomAccessFile("main/resources/hashFile.bin", "rw");
         invertedListRaf = new RandomAccessFile("main/resources/invertedlistFile.bin", "rw");
+        lzwRaf = new RandomAccessFile("main/resources/lzwFile.bin", "rw");
 
         sequentialFile = new File("main/resources/sequentialFile.bin");
         bTreeFile = new File("main/resources/bTreeFile.bin");
         hashFile = new File("main/resources/hashFile.bin");
         invertedListFile = new File("main/resources/invertedlistFile.bin");
+        lzwFile = new File("main/resources/lzwFile.bin");
 
         initiateStructures(source);
 
@@ -84,6 +90,9 @@ public class Prompt {
                 + "(3)-> Hash Operations\n"
                 + "(4)-> InvetedList Operations\n\n"
 
+                + "(5)-> Compression Operations\n"
+                + "(6)-> PatternMatching Operations\n\n"
+
                 + "(0)-> Finish Program\n"
                 +
                 "==================== INTERFACE ====================\n"
@@ -96,9 +105,9 @@ public class Prompt {
              * Need to change in method validChoice if
              * increases more choices.
             */
-            if (!validChoice(userChoice, 5)) {
+            if (!validChoice(userChoice, 7)) {
 
-                while (!validChoice(userChoice, 5)) {
+                while (!validChoice(userChoice, 7)) {
 
                     System.out.print("Invalid choice, try again: ");
                     userChoice = sc.nextInt();
@@ -131,8 +140,8 @@ public class Prompt {
             case 1:
                 System.out.println("Records from dataBase have already been loaded!");
 
-                int control = -1;
-                while (control != 0) {
+                int controlCase1 = -1;
+                while (controlCase1 != 0) {
 
                     System.out.println(
                         "==================== INTERFACE ====================\n"
@@ -169,7 +178,7 @@ public class Prompt {
                     switch (newChoice) {
 
                         case 0:
-                            control = 0;
+                            controlCase1 = 0;
                         break;
 
                         case 1:
@@ -256,7 +265,7 @@ public class Prompt {
 
                         case 6:
                             System.out.println("\nRegistered Records at moment: ");
-                            Formats.printByteArray(sequentialRaf);
+                            Utility.printByteArray(sequentialRaf);
                             System.out.println();
                         break;
                     }
@@ -276,6 +285,61 @@ public class Prompt {
             case 4:
                 //to code
             break;
+
+            case 5:
+                System.out.println("Records from dataBase have already been loaded!");
+
+                int controlCase5 = -1;
+                while (controlCase5 != 0) {
+
+                    System.out.println(
+                        "==================== INTERFACE ====================\n"
+                        + "Options->\n"
+                        + "(1)-> LZW compression\n"
+                        + "(2)-> Huffman compression\n\n"
+
+                        + "(0)-> return\n"
+                        +
+                        "==================== INTERFACE ====================\n"
+                    );
+                    System.out.print("Your option: "); int newChoice = sc.nextInt();
+
+                    /*
+                    * Checking if userChoice is valid.
+                    * 
+                    * Need to change in method validChoice if
+                    * increases more choices.
+                    */
+                    if (!validChoice(newChoice, 3)) {
+
+                        while (!validChoice(newChoice, 3)) {
+
+                            System.out.print("Invalid choice, try again: ");
+                            newChoice = sc.nextInt();
+                        }
+                    }
+
+                    switch (newChoice) {
+
+                        case 0:
+                            controlCase1 = 0;
+                        break;
+
+                        case 1:
+                            Utility.copyFileContent(sequentialRaf, lzwRaf);
+                            lzw.compression(lzwRaf);
+                        break;
+
+                        case 2:
+                            //Calls Huffman compression algorithmn
+                        break;
+                    }    
+                }
+            break;
+
+            case 6:
+                //to code
+            break;
         }
 
         return 0;
@@ -290,6 +354,10 @@ public class Prompt {
     */
     private void initiateStructures(RandomAccessFile source) throws Exception {
 
+        /*
+         * NOTATION: 
+         * Change insertion methods when they are complete
+        */
         while (source.getFilePointer() < source.length()) { crud.createDataBase(new Record().buildRecord(source.readLine()), sequentialRaf); }
         source.seek(0);
         while (source.getFilePointer() < source.length()) { crud.createDataBase(new Record().buildRecord(source.readLine()), bTreeRaf); }
@@ -319,5 +387,6 @@ public class Prompt {
         bTreeRaf.setLength(0); bTreeRaf.close(); bTreeFile.delete();
         hashRaf.setLength(0); hashRaf.close(); hashFile.delete();
         invertedListRaf.setLength(0); invertedListRaf.close(); invertedListFile.delete();
+        lzwRaf.setLength(0); lzwRaf.close(); lzwFile.delete();
     }
 }

@@ -9,7 +9,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.Scanner;
 
-import main.java.interfaces.Formats;
+import main.java.interfaces.Utility;
 
 //-----------------------------------------------------
 /*
@@ -79,7 +79,7 @@ public class Crud {
         System.out.println("\nExample of ReleaseDate: Dec 2017");
         System.out.println("Months: Jan. Feb. Mar. Apr. May June July Aug. Sep. Oct. Nov. Dec.");
         System.out.print("Record ReleaseDate: ");
-        tmp.setReleaseDate(Formats.convertToDate(sc.nextLine()));
+        tmp.setReleaseDate(Utility.convertToDate(sc.nextLine()));
 
         System.out.print("\nNumber of Record Genres: ");
         int newRecordGenres = sc.nextInt(); sc.nextLine();
@@ -247,7 +247,7 @@ public class Crud {
                             System.out.println("\nExample of ReleaseDate: Dec 2017");
                             System.out.println("Months: Jan. Feb. Mar. Apr. May June July Aug. Sep. Oct. Nov. Dec.");
                             System.out.print("New Record ReleaseDate: ");
-                            Date newDate = Formats.convertToDate(sc.nextLine());
+                            Date newDate = Utility.convertToDate(sc.nextLine());
 
                             /*
                              * Skipping useless attributes until
@@ -258,7 +258,7 @@ public class Crud {
                             source.readShort();
                             source.readUTF();
 
-                            source.writeUTF(Formats.formatDate(newDate));
+                            source.writeUTF(Utility.formatDate(newDate));
                         break;
 
                         case 3:

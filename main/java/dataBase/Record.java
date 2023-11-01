@@ -1,7 +1,7 @@
 //Dependencies
 package main.java.dataBase;
 
-import main.java.interfaces.Formats;
+import main.java.interfaces.Utility;
 
 import java.util.Date;
 import java.util.Arrays;
@@ -233,7 +233,7 @@ public class Record {
             case 1 -> game.setName(attribute);
 
             //Game ReleaseDate
-            case 2 -> game.setReleaseDate(Formats.convertToDate(attribute));
+            case 2 -> game.setReleaseDate(Utility.convertToDate(attribute));
 
             //Game Owner
             case 3 -> game.setOwners(attribute);
@@ -305,7 +305,7 @@ public class Record {
         dos.writeUTF(record.getName());
 
         //Writing GameDate
-        dos.writeUTF(Formats.formatDate(record.getReleaseDate()));
+        dos.writeUTF(Utility.formatDate(record.getReleaseDate()));
 
         //Writing GameOwners
         dos.writeInt(record.getOwners().length());
@@ -335,7 +335,7 @@ public class Record {
         dos.writeBoolean(record.getLinux());
 
         //Writing GameUpvotes
-        dos.writeInt(Integer.parseInt(Formats.formatUpVotes(record.getUpVotes(), record.getDownVotes()).replaceAll("%", "")));
+        dos.writeInt(Integer.parseInt(Utility.formatUpVotes(record.getUpVotes(), record.getDownVotes()).replaceAll("%", "")));
 
         //Writing GameAvgPT
         dos.writeInt(record.getAvgPT());
@@ -384,7 +384,7 @@ public class Record {
         raf.skipBytes(2);
         tmp.setName(raf.readUTF());
         
-        tmp.setReleaseDate(Formats.convertToDate(raf.readUTF()));
+        tmp.setReleaseDate(Utility.convertToDate(raf.readUTF()));
 
         /*
          * Skipping 4 bytes for cleaning the String size for control
@@ -455,7 +455,7 @@ public class Record {
     public String toString() {
 
         return  "Id: " + gameId + " || " + " Name: " + name
-                + " || " + " ReleaseDate: " + Formats.formatDate(releaseDate)
+                + " || " + " ReleaseDate: " + Utility.formatDate(releaseDate)
                 + " || " + " Genres: " + Arrays.asList(genres);
     }
 }
