@@ -92,9 +92,9 @@ public abstract class Utility {
      * @param int seconds -> seconds to be transformed.
     */
     public static String formatTime(int seconds) {
-        
+
         if (seconds <= 0) { return "null"; }
-    
+
         int hours = seconds / 3600;
         int minutes = (seconds % 3600) / 60;
         String formattedTime = "";
@@ -102,7 +102,7 @@ public abstract class Utility {
         if (hours > 0) { formattedTime += hours + "h "; }
 
         if (minutes > 0) { formattedTime += minutes + "m"; }
-    
+
         return formattedTime.trim(); //Remove extra spaces if is necessary
     }
 
@@ -163,7 +163,7 @@ public abstract class Utility {
                 */
                 raf.skipBytes(2);
                 tmp.setName(raf.readUTF());
-                
+
                 tmp.setReleaseDate(Utility.convertToDate(raf.readUTF()));
 
                 /*
@@ -219,9 +219,9 @@ public abstract class Utility {
                     genres[i] = raf.readUTF();
                 }
                 tmp.setGenres(genres);
-                
+
                 System.out.println("\n" + tmp);
-                
+
             } else { raf.seek(filePointer); raf.skipBytes(recordSize); }
         }
     }
@@ -248,14 +248,14 @@ public abstract class Utility {
      * to be checked
      * @throws Exception if something goes wrong with file.
     */
-    public static boolean singleFile(RandomAccessFile[] files) throws Exception {
+    public static boolean isSingleFile(RandomAccessFile[] files) throws Exception {
         int filesEmpty = 0;
-        
+
         for (RandomAccessFile file : files) { if (file.length() == 0) { filesEmpty++; } }
 
         return filesEmpty == files.length - 1;
     }
-    
+
     /*
      * Last file verification
      *
@@ -263,7 +263,7 @@ public abstract class Utility {
      * and if in that array, just one file has content, will return it.
      * @throws Exception if something goes wrong with file.
     */
-    public static RandomAccessFile lastFile(RandomAccessFile[] files) throws Exception {
+    public static RandomAccessFile getLastFile(RandomAccessFile[] files) throws Exception {
         RandomAccessFile tmp = null;
 
         for (RandomAccessFile file : files) { if (file.length() != 0) { tmp = file; } }
@@ -290,12 +290,13 @@ public abstract class Utility {
     */
     public static void copyFileContent(RandomAccessFile source, RandomAccessFile destination) throws Exception {
 
+        source.seek(0);
         destination.seek(0);
 
-        int header = destination.readInt(); //Save the original header
-        source.seek(0);
-        source.writeInt(header);            //Write the original header into the final file
-        
+        int header = source.readInt();           //Save the original header
+        destination.seek(0);
+        destination.writeInt(header);            //Write the original header into the final file
+
         //Copy the contents of the temporary file back to the original file
         byte[] buffer = new byte[4096];
         int bytesRead;
@@ -303,7 +304,34 @@ public abstract class Utility {
             destination.write(buffer, 0, bytesRead);
         }
 
-        source.close();
+    }
+
+    /*
+     * Method to turn a char into your
+     * respective binary value
+     * 
+     * @param char character -> character that will be transformed
+    */
+    public static String charToBinary(char character) {
+        String binaryValue = Integer.toBinaryString(character);
+        return binaryValue;
+    }
+
+    /*
+     * Method to transform an entire string
+     * into your binary value, character by character
+     * 
+     * @param String inputString -> string that will be
+     * transformed into binary code
+    */
+    public static String stringToBinary(String inputString) {
+        StringBuilder binaryString = new StringBuilder();
+        for (int i = 0; i < inputString.length(); i++) {
+            char character = inputString.charAt(i);
+            String binaryValue = charToBinary(character);
+            binaryString.append(binaryValue);
+        }
+        return binaryString.toString();
     }
 
     /*

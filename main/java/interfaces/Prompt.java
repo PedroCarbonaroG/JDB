@@ -322,7 +322,7 @@ public class Prompt {
                     switch (newChoice) {
 
                         case 0:
-                            controlCase1 = 0;
+                            controlCase5 = 0;
                         break;
 
                         case 1:
@@ -338,7 +338,46 @@ public class Prompt {
             break;
 
             case 6:
-                //to code
+                System.out.println("Records from dataBase have already been loaded!");
+
+                int controlCase6 = -1;
+                while (controlCase6 != 0) {
+
+                    System.out.println(
+                        "==================== INTERFACE ====================\n"
+                        + "Options->\n"
+                        + "(1)-> XXXXXXX compression\n"
+                        + "(2)-> XXXXXXX compression\n\n"
+
+                        + "(0)-> return\n"
+                        +
+                        "==================== INTERFACE ====================\n"
+                    );
+                    System.out.print("Your option: "); int newChoice = sc.nextInt();
+
+                    /*
+                    * Checking if userChoice is valid.
+                    * 
+                    * Need to change in method validChoice if
+                    * increases more choices.
+                    */
+                    if (!validChoice(newChoice, 3)) {
+
+                        while (!validChoice(newChoice, 3)) {
+
+                            System.out.print("Invalid choice, try again: ");
+                            newChoice = sc.nextInt();
+                        }
+                    }
+
+                    switch (newChoice) {
+
+                        case 0:
+                            controlCase6 = 0;
+                        break;
+
+                    }    
+                }
             break;
         }
 

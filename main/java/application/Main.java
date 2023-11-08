@@ -25,6 +25,5 @@ public abstract class Main {
         */
         Locale.setDefault(Locale.US);
         new Prompt().buildPrompt();
-
     }
 }

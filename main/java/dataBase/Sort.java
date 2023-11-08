@@ -75,7 +75,7 @@ public class Sort {
         /*
          * Final merge to sort all file.
         */
-        for (int i = 0; !Utility.singleFile(tmpFiles); setRecordsByBlock(getRecordsByBlock() * 2), i+=2) {
+        for (int i = 0; !Utility.isSingleFile(tmpFiles); setRecordsByBlock(getRecordsByBlock() * 2), i+=2) {
 
             intercalation(
             tmpFiles[i%getNumTmpFiles()],
@@ -89,7 +89,7 @@ public class Sort {
          * Transferring the file resulting from 
          * the merges to the original file used in the method.
         */
-        Utility.copyFileContent(Utility.lastFile(tmpFiles), source);
+        copyFileContent(Utility.getLastFile(tmpFiles), source);
 
         /*
          * Method for delete all temporary files
@@ -237,6 +237,23 @@ public class Sort {
         //Set the length of the input files to zero as they are no longer needed.
         firstFile.setLength(0);
         secondFile.setLength(0);
+    }
+    private static void copyFileContent(RandomAccessFile source, RandomAccessFile destination) throws Exception {
+
+        source.seek(0);
+        destination.seek(0);
+
+        int header = destination.readInt();           //Save the original header
+        source.seek(0);
+        source.writeInt(header);            //Write the original header into the final file
+
+        //Copy the contents of the temporary file back to the original file
+        byte[] buffer = new byte[4096];
+        int bytesRead;
+        while ((bytesRead = source.read(buffer)) != -1) {
+            destination.write(buffer, 0, bytesRead);
+        }
+
     }
 
     /*
