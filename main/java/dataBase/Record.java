@@ -458,4 +458,6 @@ public class Record {
                 + " || " + " ReleaseDate: " + Utility.formatDate(releaseDate)
                 + " || " + " Genres: " + Arrays.asList(genres);
     }
+
+
 }
