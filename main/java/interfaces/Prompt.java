@@ -265,7 +265,7 @@ public class Prompt {
 
                         case 6:
                             System.out.println("\nRegistered Records at moment: ");
-                            Utility.printByteArray(sequentialRaf);
+                            Utility.printByteArray(sequentialRaf, true);
                             System.out.println();
                         break;
                     }
@@ -296,7 +296,10 @@ public class Prompt {
                         "==================== INTERFACE ====================\n"
                         + "Options->\n"
                         + "(1)-> LZW compression\n"
-                        + "(2)-> Huffman compression\n\n"
+                        + "(2)-> LZW decompression\n\n"
+
+                        + "(3)-> Huffman compression\n"
+                        + "(4)-> Huffman decompression\n"
 
                         + "(0)-> return\n"
                         +
@@ -322,16 +325,27 @@ public class Prompt {
                     switch (newChoice) {
 
                         case 0:
+                            /*
+                             * Used to return to first prompt 
+                            */
                             controlCase5 = 0;
                         break;
 
                         case 1:
-                            Utility.copyFileContent(sequentialRaf, lzwRaf);
+                            Utility.transferFileContent(sequentialRaf, lzwRaf, true);
                             lzw.compression(lzwRaf);
                         break;
 
                         case 2:
+                            lzw.decompression(lzwRaf);
+                        break;
+
+                        case 3:
                             //Calls Huffman compression algorithmn
+                        break;
+
+                        case 4:
+                            //Calls Huffman decompression algorithmn
                         break;
                     }    
                 }
@@ -346,8 +360,8 @@ public class Prompt {
                     System.out.println(
                         "==================== INTERFACE ====================\n"
                         + "Options->\n"
-                        + "(1)-> XXXXXXX compression\n"
-                        + "(2)-> XXXXXXX compression\n\n"
+                        + "(1)-> XXXXXXX patternMatch\n"
+                        + "(2)-> XXXXXXX patternMatch\n\n"
 
                         + "(0)-> return\n"
                         +
