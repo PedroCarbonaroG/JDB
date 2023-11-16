@@ -333,7 +333,11 @@ public class Prompt {
 
                         case 1:
                             Utility.transferFileContent(sequentialRaf, lzwRaf, true);
+                            System.out.println("\nSource file length in bytes: " + lzwRaf.length());
+                            System.out.println("Compressing the source file...");
                             lzw.compression(lzwRaf);
+                            System.out.println("\nCompressed!");
+                            System.out.println("New compressed file length in bytes: " + lzwRaf.length());
                         break;
 
                         case 2:

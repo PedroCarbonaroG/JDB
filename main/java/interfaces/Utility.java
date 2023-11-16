@@ -393,18 +393,39 @@ public abstract class Utility {
             while ((bytesRead = source.read(buffer)) != -1) {
                 destination.write(buffer, 0, bytesRead);
             }
-        } else {
-
-
         }
     }
 
+    /*
+     * @elif transferFileContent Method
+     * 
+     * @param RandomAccessFile source -> source that will transfer
+     * all content.
+     * @param RandomAccessFile destination -> file that will receive
+     * all content by source.
+     * @param boolean hasHeader -> boolean flag to know if one or other
+     * file has an header.
+    */
     public static void transferFileContent(RandomAccessFile source, RandomAccessFile destination, boolean hasHeader) {
 
         try {
 
             if (hasHeader) {
-                //ToCode...
+                if (hasHeader) {
+                    source.seek(0);
+                    destination.setLength(0);
+                    destination.seek(0);
+
+                    int header = source.readInt();           //Save the original header
+                    destination.writeInt(header);            //Write the original header into the final file
+
+                    //Copy the contents of the temporary file back to the original file
+                    byte[] buffer = new byte[4096];
+                    int bytesRead;
+                    while ((bytesRead = source.read(buffer)) != -1) {
+                        destination.write(buffer, 0, bytesRead);
+                    }
+                }
             } else {
 
                 destination.setLength(0);
@@ -428,8 +449,7 @@ public abstract class Utility {
      * @param char character -> character that will be transformed
     */
     public static String charToBinary(char character) {
-        String binaryValue = Integer.toBinaryString(character);
-        return binaryValue;
+        return Integer.toBinaryString(character);
     }
 
     /*
