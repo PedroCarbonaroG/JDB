@@ -7,10 +7,9 @@ import main.java.interfaces.Prompt;
 
 //-----------------------------------------------------
 /*
- * @File.:      TrabalhoPratico1 - Main Class
- * @Author.:    Pedro Carbonaro
- * @Version.:   1.0
- * @Date.:      2023-08-17
+ * @File.:      TrabalhoPratico
+ * @Authors.:   Pedro Carbonaro and Gabriel Todt
+ * @StartDate.: 2023-08-17
  * @Copyright.: Copyright (c) 2023
 */
 //-----------------------------------------------------

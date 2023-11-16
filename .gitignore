@@ -1,6 +1,9 @@
 *.ideia
 *.vscode
 *.iml
-*.class
+*class
 *.xml
+*.xls
 *.DS_Store
+*.bin
+out/
