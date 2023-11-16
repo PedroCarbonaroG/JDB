@@ -341,7 +341,11 @@ public class Prompt {
                         break;
 
                         case 2:
+                            System.out.println("\nCompressed File bytes length: " + lzwRaf.length());
+                            System.out.println("Decompressing the source file...");
                             lzw.decompression(lzwRaf);
+                            System.out.println("\nDecompressed!");
+                            System.out.println("Original file bytes length: " + lzwRaf.length());
                         break;
 
                         case 3:
