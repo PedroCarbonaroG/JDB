@@ -1,0 +1,9 @@
+*.ideia
+*.vscode
+*.iml
+*class
+*.xml
+*.xls
+*.DS_Store
+*.bin
+out/
