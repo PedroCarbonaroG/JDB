@@ -1,76 +1,44 @@
 package main.java.algorithms.Huffman;
 
-import main.java.dataBase.Record;
-
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.LinkedList;
+import java.util.Set;
 
 public class Huffman {
-    private final LinkedList<HuffmanTree> list;
     private final RandomAccessFile source;
-    private HashMap<Character, Integer> map;
+    private HashMap<Vector, Integer> hashMap;
 
-    public LinkedList<HuffmanTree> getList() {
-        return list;
-    }
-    public Huffman(RandomAccessFile source){
-        list = new LinkedList<>();
-        map = new HashMap<Character, Integer>();
+
+    public Huffman(RandomAccessFile source) {
         this.source = source;
+        this.hashMap = new HashMap<Vector, Integer>();
     }
 
-    /**
-     * Create the Huffman dictionary from the source file.
-     *
-     * @param blockSize number of records loaded into memory.
-     * @throws IOException RandomAccessFile exception.
-     */
-    public void createDictionary(int blockSize) throws Exception { //set as private
-        Record tmp;
-        /*
-         * Skipping the file header.
-         */
-        if(source.getFilePointer() == 0){
-            source.skipBytes(Integer.BYTES);
-        }
-
-
-        for(int i=0; i<blockSize && source.getFilePointer()<source.length(); i++){
-            /*
-             * Skipping the record size used for control.
-             */
-            source.skipBytes(Integer.BYTES);
-            tmp = Record.fromByteArray(source, source.getFilePointer());
-
-        }
-
-    }
-    private void run() throws Exception { // corrigir (alterei o método createDictionary)
-        createDictionary(10); // valores para teste
-        for(char key: map.keySet()){
-            int value = map.get(key);
-            list.add(new HuffmanTree(new Cell(value, key)));
-        }
-        Collections.sort(list);
-
-        while(list.size()>1){
-            HuffmanTree newTree = new HuffmanTree(HuffmanTree.mergeTree(list.get(0), list.get(1)));
-            for(int i=0; i<2; i++){
-                list.removeFirst();
+    public void createDictionary(int blockSize) throws IOException {
+        long pos = source.getFilePointer();
+        source.seek(0);
+        while(source.getFilePointer()<source.length()){
+            byte[] bytes = new byte[blockSize];
+            source.read(bytes);
+            Vector tmp = new Vector(bytes);
+            if(hashMap.containsKey(tmp)){
+                hashMap.put(tmp, hashMap.get(tmp)+1);
             }
-            list.add(newTree);
-            Collections.sort(list);
+            else {
+                hashMap.put(tmp, 1);
+                System.out.println("novo");
+            }
         }
+        source.seek(pos);
+    }
+    public void printMap(){
+        for(Vector v: hashMap.keySet()){
+            System.out.println(Arrays.toString(v.getArray())+ " --> "+hashMap.get(v));
+        }
+        System.out.println(hashMap.keySet().size());
     }
 
 
-
-    public void printMap() throws Exception{
-        HuffmanTree hf = new HuffmanTree(new Cell(10));
-
-    }
 }
