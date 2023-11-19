@@ -12,13 +12,29 @@ public class Huffman {
     private final RandomAccessFile source;
     private HashMap<Vector, Integer> hashMap;
     private List<Node> priorityQueue;
+    private HashMap<Vector, String> encodeDictionary;
 
+    public HashMap<Vector, String> getEncodeDictionary() {
+        return encodeDictionary;
+    }
+    public List<Node> getPriorityQueue() {
+        return priorityQueue;
+    }
+
+    /**
+     * Constructs a Huffman object with the specified RandomAccessFile as the data source.
+     * Initializes the Huffman object with an empty frequency map, an empty priority queue,
+     * and an empty encode dictionary.
+     *
+     * @param source The RandomAccessFile representing the source data for Huffman coding.
+     */
     public Huffman(RandomAccessFile source) {
         this.source = source;
         this.hashMap = new HashMap<Vector, Integer>();
-        this.priorityQueue = new ArrayList<>() {
-        };
+        this.priorityQueue = new ArrayList<>();
+        this.encodeDictionary = new HashMap<Vector, String>();
     }
+
     /**
      * Creates a dictionary based on the specified block size from the source data.
      * The dictionary is represented using a HashMap where keys are vectors of bytes.
@@ -76,6 +92,78 @@ public class Huffman {
     private Node mergeNodes(Node left, Node right){
         return new Node(left, right);
     }
+
+    /**
+     * Creates an encoding dictionary based on the Huffman tree, assigning binary representations
+     * to each vector in the leaf nodes of the tree.
+     *
+     * @param root The root of the Huffman tree.
+     * @param map  The HashMap to store the mappings of vectors to their binary representations.
+     * @param bits A StringBuilder to build the binary representation during tree traversal.
+     */
+    public void createEncodeDictionary(Node root, HashMap<Vector, String> map,StringBuilder bits){
+        if(root != null){
+            createEncodeDictionary(root.getLeft(), map,bits.append("0"));
+            if(root instanceof  Leaf){
+                map.put(((Leaf) root).getVector(), bits.toString());
+            }
+            createEncodeDictionary(root.getRight(), map,bits.append("1"));
+        }
+        if(bits.length()>0){
+            bits.deleteCharAt(bits.length()-1);
+        }
+    }
+
+    /**
+     * Encodes the source data using the Huffman encoding based on the created dictionary,
+     * and writes the encoded bits to the specified RandomAccessFile with the given block size.
+     *
+     * @param target    The RandomAccessFile to which the encoded bits will be written.
+     * @param blockSize The size of each block to be read from the source.
+     * @throws IOException If an I/O error occurs while reading from the source or writing to the target.
+     */
+    public void encode(RandomAccessFile target, int blockSize) throws IOException {
+        long pos = source.getFilePointer();
+        target.seek(0);
+        source.seek(0);
+        while(source.getFilePointer()<source.length()){
+            byte[] bytes = new byte[blockSize];
+            source.read(bytes);
+            Vector tmp = new Vector(bytes);
+            String bits = encodeDictionary.get(tmp);
+            boolean[] bitsToWrite = convertStringToBoolean(bits);
+            for(Boolean b: bitsToWrite){
+                target.writeBoolean(b);
+            }
+        }
+        source.seek(pos);
+    }
+
+    /**
+     * Converts a string of bits into a boolean array, where each '1' in the string
+     * is represented by true in the boolean array, and each '0' is represented by false.
+     *
+     * @param bits The string of bits to be converted.
+     * @return A boolean array representing the input string of bits.
+     */
+    private boolean[] convertStringToBoolean(String bits){
+        boolean out[] = new boolean[bits.length()];
+        for(int i=0; i<bits.length(); i++){
+            out[i] = bits.charAt(i) == '1';
+        }
+        return out;
+    }
+
+    /**
+     * Prints the binary representations in the encodeDictionary for each vector.
+     * Each line displays the binary representation corresponding to a vector.
+     */
+    public void printEncodeDictionary(){
+        for(Vector s:encodeDictionary.keySet()){
+            System.out.println(encodeDictionary.get(s));
+        }
+    }
+
     /**
      * Prints the contents of the HashMap, displaying each vector and its associated count.
      * Additionally, it prints the total number of unique vectors in the HashMap.
