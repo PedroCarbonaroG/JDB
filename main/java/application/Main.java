@@ -6,6 +6,7 @@ import java.util.Locale;
 import java.util.Random;
 
 import main.java.algorithms.Huffman.Huffman;
+import main.java.algorithms.Huffman.HuffmanRunner;
 import main.java.interfaces.Prompt;
 
 //-----------------------------------------------------
@@ -20,11 +21,16 @@ import main.java.interfaces.Prompt;
 public abstract class Main {
 
     public static void main(String[] args) throws Exception {
-        /*
-         * Set locale and decimal pointers as default
-         * and starts the application.
-        */
-        Locale.setDefault(Locale.US);
-        new Prompt().buildPrompt();
+
+        HuffmanRunner hr = new HuffmanRunner(4);
+        hr.encode();
+        hr.decode();
+        //teste
+//        /*
+//         * Set locale and decimal pointers as default
+//         * and starts the application.
+//        */
+//        Locale.setDefault(Locale.US);
+//        new Prompt().buildPrompt();
     }
 }

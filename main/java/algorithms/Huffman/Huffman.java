@@ -1,5 +1,6 @@
 package main.java.algorithms.Huffman;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.*;
@@ -9,6 +10,13 @@ import java.util.*;
  * constructing a Huffman tree, and printing information about the vector frequencies.
  */
 public class Huffman {
+
+
+    private int blockSize;
+    private RandomAccessFile target;
+    private RandomAccessFile huffmanTree;
+
+    private RandomAccessFile decodedHuffman;
     private final RandomAccessFile source;
     private HashMap<Vector, Integer> hashMap;
     private List<Node> priorityQueue;
@@ -28,21 +36,22 @@ public class Huffman {
      *
      * @param source The RandomAccessFile representing the source data for Huffman coding.
      */
-    public Huffman(RandomAccessFile source) {
+    public Huffman(int blockSize, RandomAccessFile source, RandomAccessFile target) {
         this.source = source;
         this.hashMap = new HashMap<Vector, Integer>();
         this.priorityQueue = new ArrayList<>();
         this.encodeDictionary = new HashMap<Vector, String>();
+        this.target = target;
+        this.blockSize = blockSize;
     }
 
     /**
      * Creates a dictionary based on the specified block size from the source data.
      * The dictionary is represented using a HashMap where keys are vectors of bytes.
      *
-     * @param blockSize The size of each block to be read from the source.
      * @throws IOException If an I/O error occurs while reading from the source.
      */
-    public void createDictionary(int blockSize) throws IOException {
+    public void createDictionary() throws IOException {
         long pos = source.getFilePointer();
         source.seek(0);
         while(source.getFilePointer()<source.length()){
@@ -101,7 +110,7 @@ public class Huffman {
      * @param map  The HashMap to store the mappings of vectors to their binary representations.
      * @param bits A StringBuilder to build the binary representation during tree traversal.
      */
-    public void createEncodeDictionary(Node root, HashMap<Vector, String> map,StringBuilder bits){
+    private void createEncodeDictionary(Node root, HashMap<Vector, String> map,StringBuilder bits){
         if(root != null){
             createEncodeDictionary(root.getLeft(), map,bits.append("0"));
             if(root instanceof  Leaf){
@@ -118,11 +127,11 @@ public class Huffman {
      * Encodes the source data using the Huffman encoding based on the created dictionary,
      * and writes the encoded bits to the specified RandomAccessFile with the given block size.
      *
-     * @param target    The RandomAccessFile to which the encoded bits will be written.
-     * @param blockSize The size of each block to be read from the source.
      * @throws IOException If an I/O error occurs while reading from the source or writing to the target.
      */
-    public void encode(RandomAccessFile target, int blockSize) throws IOException {
+    public void encode() throws IOException {
+        System.out.println("Encoding");
+        createEncodeDictionary(priorityQueue.getFirst(),encodeDictionary,new StringBuilder()); // conferir
         long pos = source.getFilePointer();
         target.seek(0);
         source.seek(0);
@@ -137,6 +146,31 @@ public class Huffman {
             }
         }
         source.seek(pos);
+    }
+
+    /**
+     * Decodes the Huffman-encoded data and writes the decoded bytes to a new RandomAccessFile.
+     * This method assumes that the target RandomAccessFile contains Huffman-encoded data.
+     *
+     * @throws IOException If an I/O error occurs while decoding or writing to the output file.
+     */
+    public void decode() throws IOException {
+        System.out.println("decoding");
+        decodedHuffman = new RandomAccessFile("main/resources/decodedHuffman.bin", "rw");
+        byte[] decoded = new byte[blockSize];
+        target.seek(0);
+        while(target.getFilePointer()<target.length()){
+            Node navigate = priorityQueue.getFirst();
+            while(!(navigate instanceof Leaf)){
+                if(!target.readBoolean()){
+                    navigate = navigate.getLeft();
+                }
+                else {
+                    navigate = navigate.getRight();
+                }
+            }
+            decodedHuffman.write(((Leaf) navigate).getVector().getArray());
+        }
     }
 
     /**
