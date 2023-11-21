@@ -13,7 +13,9 @@ public class LZW {
      * Global attributes for LZW compress and decompress
     */
     private HashMap<String, Short> compMap;
-    private static short nextCodeAvaliable;
+    private HashMap<Short, String> decompMap;
+    private static short nextCodeAvaliableComp;
+    private static short nextCodeAvaliableDecomp;
     private final short TABLE_MAX_LENGTH = 32767;
 
     /*
@@ -25,7 +27,9 @@ public class LZW {
          * and the next codes avaliables for values
         */
         compMap = new HashMap<String, Short>();
-        nextCodeAvaliable = 0;
+        decompMap = new HashMap<Short, String>();
+        nextCodeAvaliableComp = 0;
+        nextCodeAvaliableDecomp = 0;
 
         /*
          * Starts the structure with all 256
@@ -33,13 +37,18 @@ public class LZW {
         */
         for (int i = 0; i < 256; i++) {
             compMap.put(Integer.toBinaryString(i), (short)i);
-            nextCodeAvaliable++;
+            nextCodeAvaliableComp++;
+        }
+
+        for (int i = 0; i < 256; i++) {
+            decompMap.put((short)i, Integer.toBinaryString(i));
+            nextCodeAvaliableDecomp++;
         }
     }
 
     /*
      * LZW Compression method, used for compress
-     * an file.
+     * a file.
      * 
      * @param RandomAccessFile source -> source that
      * will be compressed
@@ -48,8 +57,8 @@ public class LZW {
 
         try {
 
-            RandomAccessFile newLzwRaf = new RandomAccessFile("main/resources/newLzwFile.bin", "rw");
-            File newLzwFile = new File("main/resources/newLzwFile.bin");
+            RandomAccessFile newLzwRaf = new RandomAccessFile("src/main/resources/newLzwFile.bin", "rw");
+            File newLzwFile = new File("src/main/resources/newLzwFile.bin");
 
             source.seek(0);
             newLzwRaf.setLength(0);
@@ -62,12 +71,12 @@ public class LZW {
                 String prefixSequence = Utility.stringToBinary(sequence.substring(0, sequence.length() - 1));
                 String binarySequence = Utility.stringToBinary(sequence);
 
-                if (nextCodeAvaliable < TABLE_MAX_LENGTH) {
+                if (nextCodeAvaliableComp < TABLE_MAX_LENGTH) {
                     if (!compMap.containsKey(binarySequence)) {
                         short prefixIndex = compMap.get(prefixSequence);
                         newLzwRaf.writeShort(prefixIndex);
 
-                        compMap.put(binarySequence, ++nextCodeAvaliable);
+                        compMap.put(binarySequence, ++nextCodeAvaliableComp);
                         sequence = "";
                     }
                 } else {
