@@ -1,5 +1,5 @@
 //Dependencies
-package main.java.structures.BTree;
+package main.java.structures.bTree;
 
 //-----------------------------------------------------
 /*

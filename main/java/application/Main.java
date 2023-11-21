@@ -1,15 +1,11 @@
 //Dependencies
 package main.java.application;
 
-import java.io.RandomAccessFile;
 import java.util.Locale;
-import java.util.Random;
 
-import main.java.algorithms.Huffman.Huffman;
-import main.java.algorithms.Huffman.HuffmanRunner;
 import main.java.interfaces.Prompt;
 
-//-----------------------------------------------------
+/*-----------------------------------------------------
 /*
  * @File.:      TrabalhoPratico
  * @Authors.:   Pedro Carbonaro and Gabriel Todt
@@ -18,11 +14,11 @@ import main.java.interfaces.Prompt;
 */
 //-----------------------------------------------------
 
-public abstract class Main {
+public class Main {
 
     public static void main(String[] args) throws Exception {
 
-        /*x
+        /*
          * Set locale and decimal pointers as default
          * and starts the application.
         */

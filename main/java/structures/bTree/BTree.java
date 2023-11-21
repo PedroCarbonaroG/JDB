@@ -1,9 +1,9 @@
 //Dependencies
-package main.java.structures.Hash;
+package main.java.structures.bTree;
 
 //-----------------------------------------------------
 /*
- * @File.:      TrabalhoPratico1 - Hash map Class
+ * @File.:      TrabalhoPratico1 - BTREE Class
  * @Author.:    Pedro Carbonaro
  * @Version.:   1.0
  * @Date.:      2023-08-17
@@ -11,6 +11,6 @@ package main.java.structures.Hash;
 */
 //-----------------------------------------------------
 
-public class Hash {
+public class BTree {
 
 }

@@ -1,4 +1,4 @@
-package main.java.algorithms.Huffman;
+package main.java.algorithms.huffman;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
@@ -80,13 +80,15 @@ public class Huffman {
             Leaf tmp = new Leaf(v, hashMap.get(v));
             priorityQueue.add(tmp);
         }
+
         /*
          * Sorting the list.
          */
         Collections.sort(priorityQueue);
-        while(priorityQueue.size()>1){
+        while(priorityQueue.size()>1) {
             Node left = priorityQueue.removeFirst();
             Node right = priorityQueue.removeFirst();
+
             priorityQueue.add(mergeNodes(left,right));
             Collections.sort(priorityQueue);
         }

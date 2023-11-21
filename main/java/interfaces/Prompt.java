@@ -9,12 +9,12 @@ import java.nio.charset.StandardCharsets;
 
 import java.util.Scanner;
 
-import main.java.algorithms.LZW.LZW;
+import main.java.algorithms.lzw.LZW;
 import main.java.dataBase.Crud;
 import main.java.dataBase.Record;
 import main.java.dataBase.Sort;
-import main.java.structures.BTree.BTree;
-import main.java.structures.Hash.Hash;
+import main.java.structures.bTree.BTree;
+import main.java.structures.hash.Hash;
 import main.java.structures.invertedList.InvertedList;
 
 //-----------------------------------------------------
@@ -32,7 +32,7 @@ public class Prompt {
     private final Scanner sc = new Scanner(System.in, StandardCharsets.UTF_8);
     private static final String dataBaseFilePath = "main/resources/gamesForTests.csv";
 
-    /*
+    /**
      * Necessary files to handle all types of services offered by 
      * the application and their respective other files for deletion 
      * at the end of the program.
@@ -120,7 +120,7 @@ public class Prompt {
         }
     }
 
-    /*
+    /**
      * Large and complex method as it has several branches, but necessary 
      * to execute the application, collects the user's choice and performs 
      * the necessary tasks.
@@ -299,7 +299,7 @@ public class Prompt {
                         + "(2)-> LZW decompression\n\n"
 
                         + "(3)-> Huffman compression\n"
-                        + "(4)-> Huffman decompression\n"
+                        + "(4)-> Huffman decompression\n\n"
 
                         + "(0)-> return\n"
                         +
@@ -406,7 +406,7 @@ public class Prompt {
         return 0;
     }
 
-    /*
+    /**
      * Method to initialize all structures with their respective 
      * private insertions using the chosen database.
      * 
@@ -429,7 +429,7 @@ public class Prompt {
         source.seek(0);
     }
 
-    /*
+    /**
      * Validchecker method.
      * 
      * @param int x -> Variable used to check if that option
@@ -438,7 +438,7 @@ public class Prompt {
     */
     private boolean validChoice(int x, int limit) { return x >= 0 && x < limit; }
 
-    /*
+    /**
      * Finishing all files for end of application, turn all to 0 length and close, after
      * that, program delete all of them.
     */

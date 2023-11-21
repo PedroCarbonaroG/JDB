@@ -1,6 +1,4 @@
-package main.java.algorithms.Huffman;
-
-import java.util.Arrays;
+package main.java.algorithms.huffman;
 
 public class Node implements Comparable<Node>{
     private int frequency;

@@ -1,4 +1,4 @@
-package main.java.algorithms.Huffman;
+package main.java.algorithms.huffman;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;

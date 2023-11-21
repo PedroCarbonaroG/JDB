@@ -470,6 +470,31 @@ public abstract class Utility {
     }
 
     /*
+     * Method to convert a binary string to its corresponding character
+     *
+     * @param String binaryString -> binary string to be transformed
+     */
+    public static char binaryToChar(String binaryString) {
+        int charCode = Integer.parseInt(binaryString, 2);
+        return (char) charCode;
+    }
+
+    /*
+     * Method to convert a binary string to its corresponding string of characters
+     *
+     * @param String binaryString -> binary string to be transformed into characters
+     */
+    public static String binaryToString(String binaryString) {
+        StringBuilder result = new StringBuilder();
+        for (int i = 0; i < binaryString.length(); i += 8) {
+            String binaryChar = binaryString.substring(i, Math.min(i + 8, binaryString.length()));
+            int charCode = Integer.parseInt(binaryChar, 2);
+            result.append((char) charCode);
+        }
+        return result.toString();
+    }
+
+    /*
      * myPrint method.
      * 
      * @param String line -> String to be converted to 
