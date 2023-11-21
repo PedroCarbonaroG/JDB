@@ -7,6 +7,15 @@ import java.util.HashMap;
 
 import main.java.interfaces.Utility;
 
+/*-----------------------------------------------------
+/*
+ * @File.:      Trabalho Pratico - LZW algorithmn Class
+ * @Author.:    Pedro Carbonaro
+ * @StartDate.: 2023-11-08
+ * @Copyright.: Copyright (c) 2023
+*/
+//-----------------------------------------------------
+
 public class LZW {
 
     /*
@@ -39,7 +48,6 @@ public class LZW {
             compMap.put(Integer.toBinaryString(i), (short)i);
             nextCodeAvaliableComp++;
         }
-
         for (int i = 0; i < 256; i++) {
             decompMap.put((short)i, Integer.toBinaryString(i));
             nextCodeAvaliableDecomp++;

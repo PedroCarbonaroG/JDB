@@ -9,10 +9,13 @@ import java.nio.charset.StandardCharsets;
 
 import java.util.Scanner;
 
+import main.java.algorithms.kmp.KMP;
 import main.java.algorithms.lzw.LZW;
+
 import main.java.dataBase.Crud;
 import main.java.dataBase.Record;
 import main.java.dataBase.Sort;
+
 import main.java.structures.bTree.BTree;
 import main.java.structures.hash.Hash;
 import main.java.structures.invertedList.InvertedList;
@@ -30,7 +33,7 @@ import main.java.structures.invertedList.InvertedList;
 public class Prompt {
     
     private final Scanner sc = new Scanner(System.in, StandardCharsets.UTF_8);
-    private static final String dataBaseFilePath = "main/resources/gamesForTests.csv";
+    private static final String DATA_BASE_FILE_PATH = "main/resources/gamesForTests.csv";
 
     /**
      * Necessary files to handle all types of services offered by 
@@ -61,10 +64,11 @@ public class Prompt {
     Sort sort = new Sort();
     Crud crud = new Crud();
     LZW lzw = new LZW();
+    KMP kmp = new KMP();
 
     public void buildPrompt() throws Exception {
 
-        RandomAccessFile source = new RandomAccessFile(dataBaseFilePath, "rw");
+        RandomAccessFile source = new RandomAccessFile(DATA_BASE_FILE_PATH, "rw");
 
         sequentialRaf = new RandomAccessFile("main/resources/sequentialFile.bin", "rw");
         bTreeRaf = new RandomAccessFile("main/resources/bTreeFile.bin", "rw");
@@ -203,7 +207,7 @@ public class Prompt {
                         case 3:
                             System.out.print("\nWrite the IdRecord you want to update: ");
                 
-                            if (crud.update(sc.nextInt(), sequentialRaf)) { System.out.println("\nRecord has been updated successfully."); } 
+                            if (crud.update(sc.nextInt(), sequentialRaf)) { System.out.println("\nRecord has been updated successfully."); }
                             else { System.out.println("\nRecord could not be updated. Try another recordId."); }
                         break;
 
@@ -368,8 +372,8 @@ public class Prompt {
                     System.out.println(
                         "==================== INTERFACE ====================\n"
                         + "Options->\n"
-                        + "(1)-> XXXXXXX patternMatch\n"
-                        + "(2)-> XXXXXXX patternMatch\n\n"
+                        + "(1)-> KMP patternMatch\n"
+                        + "(2)-> RabinKarp patternMatch\n\n"
 
                         + "(0)-> return\n"
                         +
@@ -396,6 +400,19 @@ public class Prompt {
 
                         case 0:
                             controlCase6 = 0;
+                        break;
+
+                        case 1:
+                            sc.nextLine(); // cleaning the buffer
+
+                            System.out.print("Pattern to match: ");
+                            String toSearch = sc.nextLine();
+
+                            kmp.search(toSearch);
+                        break;
+
+                        case 2:
+
                         break;
 
                     }    
@@ -441,6 +458,8 @@ public class Prompt {
     /**
      * Finishing all files for end of application, turn all to 0 length and close, after
      * that, program delete all of them.
+     *
+     * @param nothing
     */
     private void endFiles() throws IOException {
 

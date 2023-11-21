@@ -20,9 +20,6 @@ import java.io.RandomAccessFile;
 */
 //-----------------------------------------------------
 
-/*
- *  Games class that has its attributes.
-*/
 public class Record {
 
     //Private attributes
@@ -160,7 +157,7 @@ public class Record {
     public final void setDevelopers(String developers) { this.developers = developers; }
     public final void setGenres(String[] genres) { this.genres = genres; }
 
-    /*
+    /**
      * Parser method.
      * 
      * @param String line -> line extracted from csv file containing
@@ -214,8 +211,8 @@ public class Record {
 
         return tmp;
     }
-    /*
-     * Setting the Record attributes by an key.
+    /**
+     * Setting the Record attributes by a key.
      * 
      * @param Record game -> record to be setted by given attributes.
      * @param int key -> used to split the attributes by index.
@@ -281,7 +278,7 @@ public class Record {
         }
     }
 
-    /*
+    /**
      * Convert the Record object into byte array.
      * 
      * @param Record record -> element to be converted.
@@ -356,8 +353,8 @@ public class Record {
         return baos.toByteArray();
     }
 
-    /*
-     * Convert an byte array into Record object.
+    /**
+     * Convert a byte array into Record object.
      * 
      * @param RandomAcessFile raf -> File used for get the bytes 
      * and turn into a Record object.
@@ -443,7 +440,7 @@ public class Record {
         return tmp;
     }
 
-    /*
+    /**
      * Used record have more attributes
      * but for the application is only needed
      * those attributes in toString.
@@ -458,6 +455,5 @@ public class Record {
                 + " || " + " ReleaseDate: " + Utility.formatDate(releaseDate)
                 + " || " + " Genres: " + Arrays.asList(genres);
     }
-
 
 }

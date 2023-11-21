@@ -31,7 +31,7 @@ public class Crud {
     private final Scanner sc = new Scanner(System.in, StandardCharsets.UTF_8);
     private static int newId = 4136;
 
-    /*
+    /**
      * Creating a new Record at file.
      * 
      * @param Record record -> Record to be created in File
@@ -60,7 +60,7 @@ public class Crud {
         source.write(newRecordBytes);
     }
 
-    /*
+    /**
      * Creating an individual Record requested by user.
      * 
      * @param RandomAcessFile source -> source in which it will be inserted
@@ -123,7 +123,7 @@ public class Crud {
         source.write(newRecordBytes);
     }
 
-    /*
+    /**
      * Reading a specified Record at file.
      * 
      * @param int id -> Record id to be readed
@@ -176,7 +176,7 @@ public class Crud {
         return tmp;
     }
 
-    /*
+    /**
      * Updating a specified Record at file.
      * 
      * @param int id -> Record id to be updated
@@ -307,7 +307,7 @@ public class Crud {
         return isUpdated;
     }
 
-    /*
+    /**
      * Deleting a specified Record at file.
      * 
      * @param int id -> Record id to be deleted

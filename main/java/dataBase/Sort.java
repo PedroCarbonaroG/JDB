@@ -41,7 +41,7 @@ public class Sort {
         this.recordsByBlock = recordsByBlock;
     }
 
-    /*
+    /**
      * Sorting by Balanced interleaving
      *
      * @param RandomAccessFile raf -> File that will
@@ -98,7 +98,7 @@ public class Sort {
         for (int i = 0; i < getNumTmpFiles(); i++) { tmpFiles[i].close(); rafTmpFiles[i].delete(); }
 
     }
-    /*
+    /**
      * Auxiliar method for sorting the file by merging.
      *
      * @param RandomAccessFile raf -> Principal file to untangle
@@ -139,7 +139,7 @@ public class Sort {
             control = !control;
         }
     }
-    /*
+    /**
      * Final merging of all files
      * 
      * @param RandomAccessFile firstFile  -> First file to be read
@@ -256,21 +256,21 @@ public class Sort {
 
     }
 
-    /*
+    /**
      * To code
     */
     public void sortIFS(RandomAccessFile source) throws Exception {
         //To code
     }
 
-    /*
+    /**
      * To code
     */
     public void sortISS(RandomAccessFile source) throws Exception {
         //To code
     }
 
-    /*
+    /**
      * QuickSort
      *
      * @param Record[] records -> array that will be ordenated.
@@ -300,7 +300,7 @@ public class Sort {
         if(i < right) quickSort(records, i, right);
     }
 
-    /*
+    /**
      * Swap method between array indexes.
      *
      * @param Record[] records -> array that will be ordenated.

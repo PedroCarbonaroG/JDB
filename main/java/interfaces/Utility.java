@@ -31,9 +31,9 @@ public abstract class Utility {
      * Encoding used for printing and writing 
      * by keyboard in specified encoding. 
     */
-    private static final String encoding = "UTF-8";
+    private static final String DEFAULT_ENCODING = "UTF-8";
 
-    /*
+    /**
      * Method for converting Date type into a String
      * 
      * @param Date date-> date to be transformed
@@ -43,7 +43,7 @@ public abstract class Utility {
         return new SimpleDateFormat("MMM/yyyy", Locale.US).format(date);
     }
 
-    /*
+    /**
      * Method for converting String to Date type
      * 
      * @param String strDate -> String used to 
@@ -66,7 +66,7 @@ public abstract class Utility {
         return convertedDate;
     }
 
-    /*
+    /**
      * Method for formating Record price
      * 
      * @param double price -> used for format price
@@ -76,7 +76,7 @@ public abstract class Utility {
         return new DecimalFormat("0.00").format(price);
     }
 
-    /*
+    /**
      * Method for calculate and format percentage
      * 
      * @param double upVotes -> used to calculate the avarage.
@@ -86,7 +86,7 @@ public abstract class Utility {
         return ((int)Math.round((upVotes / (upVotes + downVotes)) * 100) + "%");
     }
 
-    /*
+    /**
      * Method for formating game avgPT (Hours)
      * 
      * @param int seconds -> seconds to be transformed.
@@ -106,7 +106,7 @@ public abstract class Utility {
         return formattedTime.trim(); //Remove extra spaces if is necessary
     }
 
-    /*
+    /**
      * Method for show Languages and Genres array.
      * 
      * @param String[] array -> array that will be showed.
@@ -120,7 +120,7 @@ public abstract class Utility {
         return array;
     }
 
-    /*
+    /**
      * Method for print an array of bytes.
      * 
      * @param RandomAcessFile raf -> File who will be used
@@ -316,7 +316,7 @@ public abstract class Utility {
         }
     }
 
-    /*
+    /**
      * EndOfFile checking method.
      * 
      * @param RandomAcessFile raf -> File used for checking while
@@ -330,7 +330,7 @@ public abstract class Utility {
         catch (IOException e) { throw new IOException("Error while was checking the EOF.", e); }
     }
 
-    /*
+    /**
      * Checking if in a RandomAccessFile[]
      * has only one file with content
      * 
@@ -346,7 +346,7 @@ public abstract class Utility {
         return filesEmpty == files.length - 1;
     }
 
-    /*
+    /**
      * Last file verification
      *
      * @param RandomAccessFile[] files -> Array of rafs to be checked
@@ -361,7 +361,7 @@ public abstract class Utility {
         return tmp;
     }
 
-    /*
+    /**
      * Method for transfer data from
      * one file to another.
      * @param RandomAccessFile source -> source file that will be transfered.
@@ -371,7 +371,7 @@ public abstract class Utility {
         while (!Utility.EOF(source)) { destination.write(source.read()); }
     }
 
-    /*
+    /**
      * Method for copying content from a file with 
      * a header to another.
      * 
@@ -396,8 +396,8 @@ public abstract class Utility {
         }
     }
 
-    /*
-     * @elif transferFileContent Method
+    /**
+     * transferFileContent Method
      * 
      * @param RandomAccessFile source -> source that will transfer
      * all content.
@@ -442,7 +442,7 @@ public abstract class Utility {
         } catch (Exception e) { e.printStackTrace(); }
     }
 
-    /*
+    /**
      * Method to turn a char into your
      * respective binary value
      * 
@@ -452,7 +452,7 @@ public abstract class Utility {
         return Integer.toBinaryString(character);
     }
 
-    /*
+    /**
      * Method to transform an entire string
      * into your binary value, character by character
      * 
@@ -469,7 +469,7 @@ public abstract class Utility {
         return binaryString.toString();
     }
 
-    /*
+    /**
      * Method to convert a binary string to its corresponding character
      *
      * @param String binaryString -> binary string to be transformed
@@ -479,7 +479,7 @@ public abstract class Utility {
         return (char) charCode;
     }
 
-    /*
+    /**
      * Method to convert a binary string to its corresponding string of characters
      *
      * @param String binaryString -> binary string to be transformed into characters
@@ -494,7 +494,7 @@ public abstract class Utility {
         return result.toString();
     }
 
-    /*
+    /**
      * myPrint method.
      * 
      * @param String line -> String to be converted to 
@@ -504,13 +504,13 @@ public abstract class Utility {
 
         try {
 
-            PrintStream psOut = new PrintStream(System.out, true, encoding);
+            PrintStream psOut = new PrintStream(System.out, true, DEFAULT_ENCODING);
             psOut.print(line);
         }
         catch (UnsupportedEncodingException e) { e.printStackTrace(); }
     }
 
-    /*
+    /**
      * myPrintln method.
      * 
      * @param String line -> String to be converted to 
@@ -520,7 +520,7 @@ public abstract class Utility {
 
         try {
 
-            PrintStream psOut = new PrintStream(System.out, true, encoding);
+            PrintStream psOut = new PrintStream(System.out, true, DEFAULT_ENCODING);
             psOut.println(line);
         }
         catch (UnsupportedEncodingException e) { e.printStackTrace(); }
