@@ -22,15 +22,11 @@ public abstract class Main {
 
     public static void main(String[] args) throws Exception {
 
-        HuffmanRunner hr = new HuffmanRunner(4);
-        hr.encode();
-        hr.decode();
-        //teste
-//        /*
-//         * Set locale and decimal pointers as default
-//         * and starts the application.
-//        */
-//        Locale.setDefault(Locale.US);
-//        new Prompt().buildPrompt();
+        /*x
+         * Set locale and decimal pointers as default
+         * and starts the application.
+        */
+        Locale.setDefault(Locale.US);
+        new Prompt().buildPrompt();
     }
 }

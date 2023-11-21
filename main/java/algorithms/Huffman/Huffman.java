@@ -1,6 +1,5 @@
 package main.java.algorithms.Huffman;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.*;
@@ -15,7 +14,6 @@ public class Huffman {
     private int blockSize;
     private RandomAccessFile target;
     private RandomAccessFile huffmanTree;
-
     private RandomAccessFile decodedHuffman;
     private final RandomAccessFile source;
     private HashMap<Vector, Integer> hashMap;
@@ -36,13 +34,15 @@ public class Huffman {
      *
      * @param source The RandomAccessFile representing the source data for Huffman coding.
      */
-    public Huffman(int blockSize, RandomAccessFile source, RandomAccessFile target) {
+    public Huffman(int blockSize, RandomAccessFile source, RandomAccessFile target,RandomAccessFile huffmanTree) {
         this.source = source;
+        this.huffmanTree = huffmanTree;
         this.hashMap = new HashMap<Vector, Integer>();
         this.priorityQueue = new ArrayList<>();
         this.encodeDictionary = new HashMap<Vector, String>();
         this.target = target;
         this.blockSize = blockSize;
+
     }
 
     /**
@@ -67,6 +67,7 @@ public class Huffman {
         }
         source.seek(pos);
     }
+
     /**
      * Creates a Huffman tree based on the frequency information stored in the hashMap.
      * This method follows the Huffman coding algorithm to build the tree by merging nodes with the lowest frequencies.
@@ -118,7 +119,7 @@ public class Huffman {
             }
             createEncodeDictionary(root.getRight(), map,bits.append("1"));
         }
-        if(bits.length()>0){
+        if(!bits.isEmpty()){
             bits.deleteCharAt(bits.length()-1);
         }
     }
@@ -145,6 +146,7 @@ public class Huffman {
                 target.writeBoolean(b);
             }
         }
+        saveHuffmanTree(priorityQueue.getFirst(), new StringBuilder());
         source.seek(pos);
     }
 
@@ -157,7 +159,6 @@ public class Huffman {
     public void decode() throws IOException {
         System.out.println("decoding");
         decodedHuffman = new RandomAccessFile("main/resources/decodedHuffman.bin", "rw");
-        byte[] decoded = new byte[blockSize];
         target.seek(0);
         while(target.getFilePointer()<target.length()){
             Node navigate = priorityQueue.getFirst();
@@ -173,6 +174,31 @@ public class Huffman {
         }
     }
 
+
+    /**
+     * Method to save the Huffman tree to an output stream.
+     *
+     * @param node The current node in the Huffman tree.
+     * @param str  The StringBuilder to build the path to the current node.
+     * @throws IOException If an input/output error occurs during writing.
+     */
+    private void saveHuffmanTree(Node node, StringBuilder str) throws IOException {
+        if(node != null){
+            saveHuffmanTree(node.getLeft(), str.append("0"));
+            if(node instanceof Leaf){
+                boolean[] path = convertStringToBoolean(str.toString());
+                for(boolean b:path){
+                    huffmanTree.writeBoolean(b);
+                }
+                huffmanTree.write(((Leaf) node).getVector().getArray());
+            }
+            saveHuffmanTree(node.getRight(), str.append("1"));
+        }
+        if(!str.isEmpty()){
+            str.deleteCharAt(str.length()-1);
+        }
+    }
+
     /**
      * Converts a string of bits into a boolean array, where each '1' in the string
      * is represented by true in the boolean array, and each '0' is represented by false.
@@ -181,7 +207,7 @@ public class Huffman {
      * @return A boolean array representing the input string of bits.
      */
     private boolean[] convertStringToBoolean(String bits){
-        boolean out[] = new boolean[bits.length()];
+        boolean[] out = new boolean[bits.length()];
         for(int i=0; i<bits.length(); i++){
             out[i] = bits.charAt(i) == '1';
         }

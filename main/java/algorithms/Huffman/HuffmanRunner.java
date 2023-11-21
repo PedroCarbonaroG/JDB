@@ -7,7 +7,7 @@ import java.io.RandomAccessFile;
 public class HuffmanRunner {
     private Huffman huffman;
     public HuffmanRunner(int blockSize) throws FileNotFoundException {
-        this.huffman = new Huffman(blockSize,new RandomAccessFile("main/resources/sequentialFile.bin", "rw"),new RandomAccessFile("/Users/gabrieltodt/JDB/main/resources/sequentialFileHuffman.bin", "rw"));
+        this.huffman = new Huffman(blockSize,new RandomAccessFile("main/resources/sequentialFile.bin", "rw"),new RandomAccessFile("/Users/gabrieltodt/JDB/main/resources/sequentialFileHuffman.bin", "rw"),new RandomAccessFile("/Users/gabrieltodt/JDB/main/resources/huffmanTree.bin", "rw"));
     }
     public void encode() throws IOException {
         huffman.createDictionary();
