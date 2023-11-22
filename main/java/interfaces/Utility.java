@@ -123,195 +123,195 @@ public abstract class Utility {
     /**
      * Method for print an array of bytes.
      * 
-     * @param RandomAcessFile raf -> File who will be used
+     * @param RandomAcessFile source -> File who will be used
      * to print everything in there.
      * @throws Exception if something goes wrong with file path
      * or file content.
     */
-    public static void printByteArray(RandomAccessFile raf, boolean hasHeader) throws Exception {
+    public static void printByteArray(RandomAccessFile source, boolean hasHeader) throws Exception {
 
         Record tmp = new Record();
         long filePointer;
         int recordSize;
 
-        raf.seek(0);
+        source.seek(0);
 
         if (hasHeader) {
 
             //Skipping useless information (header)
-            raf.skipBytes(4);
+            source.skipBytes(4);
 
-            while (raf.getFilePointer() < raf.length()) {
+            while (source.getFilePointer() < source.length()) {
 
-                recordSize = raf.readInt();
-                filePointer = raf.getFilePointer();
+                recordSize = source.readInt();
+                filePointer = source.getFilePointer();
 
                 /*
                 * Reading Record flag to know
                 * if is a valid or not Record to be readed.
                 */
-                if (raf.readBoolean()) {
+                if (source.readBoolean()) {
 
-                    raf.seek(filePointer);
+                    source.seek(filePointer);
 
                     /*
                     * Assigning the attributes into the object sequentially
                     */
-                    tmp.setValid(raf.readBoolean());
-                    tmp.setGameId(raf.readInt());
+                    tmp.setValid(source.readBoolean());
+                    tmp.setGameId(source.readInt());
 
                     /*
                     * Skipping 2 bytes (Short type) for cleaning the String size for control
                     */
-                    raf.skipBytes(2);
-                    tmp.setName(raf.readUTF());
+                    source.skipBytes(2);
+                    tmp.setName(source.readUTF());
 
-                    tmp.setReleaseDate(Utility.convertToDate(raf.readUTF()));
+                    tmp.setReleaseDate(Utility.convertToDate(source.readUTF()));
 
                     /*
                     * Skipping 4 bytes for cleaning the String size for control
                     */
-                    raf.skipBytes(4);
-                    tmp.setOwners(raf.readUTF());
+                    source.skipBytes(4);
+                    tmp.setOwners(source.readUTF());
 
-                    tmp.setAge(raf.readInt());
-                    tmp.setPrice(raf.readDouble());
-                    tmp.setDlcs(raf.readInt());
+                    tmp.setAge(source.readInt());
+                    tmp.setPrice(source.readDouble());
+                    tmp.setDlcs(source.readInt());
 
                     /*
                     * Needs to skip 4 bytes for each String in vect
                     * for cleaning the String size for control
                     */
-                    int languagesSize = (int) raf.readShort();
+                    int languagesSize = (int) source.readShort();
                     String[] languages = new String[languagesSize];
                     for (int i = 0; i < languagesSize; i++) {
 
-                        raf.skipBytes(2);
-                        languages[i] = raf.readUTF();
+                        source.skipBytes(2);
+                        languages[i] = source.readUTF();
                     }
                     tmp.setLanguages(languages);
 
                     /*
                     * Skipping 2 bytes for string length
                     */
-                    raf.skipBytes(2);
-                    tmp.setWebsite(raf.readUTF());
+                    source.skipBytes(2);
+                    tmp.setWebsite(source.readUTF());
 
-                    tmp.setWindows(raf.readBoolean());
-                    tmp.setMac(raf.readBoolean());
-                    tmp.setLinux(raf.readBoolean());
-                    tmp.setUpVotes(raf.readInt());
-                    tmp.setAvgPT(raf.readInt());
+                    tmp.setWindows(source.readBoolean());
+                    tmp.setMac(source.readBoolean());
+                    tmp.setLinux(source.readBoolean());
+                    tmp.setUpVotes(source.readInt());
+                    tmp.setAvgPT(source.readInt());
 
                     /*
                     * Skipping 2 bytes for string length
                     */
-                    raf.skipBytes(2);
-                    tmp.setDevelopers(raf.readUTF());
+                    source.skipBytes(2);
+                    tmp.setDevelopers(source.readUTF());
 
                     /*
                     * Needs to skip 4 bytes for each String
                     * for cleaning the String size for control
                     */
-                    int genresSize = (int) raf.readShort();
+                    int genresSize = (int) source.readShort();
                     String[] genres = new String[genresSize];
                     for (int i = 0; i < genresSize; i++) {
 
-                        raf.skipBytes(2);
-                        genres[i] = raf.readUTF();
+                        source.skipBytes(2);
+                        genres[i] = source.readUTF();
                     }
                     tmp.setGenres(genres);
 
                     System.out.println("\n" + tmp);
 
-                } else { raf.seek(filePointer); raf.skipBytes(recordSize); }
+                } else { source.seek(filePointer); source.skipBytes(recordSize); }
             }   
         } else {
 
-            while (raf.getFilePointer() < raf.length()) {
+            while (source.getFilePointer() < source.length()) {
 
-                recordSize = raf.readInt();
-                filePointer = raf.getFilePointer();
+                recordSize = source.readInt();
+                filePointer = source.getFilePointer();
 
                 /*
                 * Reading Record flag to know
                 * if is a valid or not Record to be readed.
                 */
-                if (raf.readBoolean()) {
+                if (source.readBoolean()) {
 
-                    raf.seek(filePointer);
+                    source.seek(filePointer);
 
                     /*
                     * Assigning the attributes into the object sequentially
                     */
-                    tmp.setValid(raf.readBoolean());
-                    tmp.setGameId(raf.readInt());
+                    tmp.setValid(source.readBoolean());
+                    tmp.setGameId(source.readInt());
 
                     /*
                     * Skipping 2 bytes (Short type) for cleaning the String size for control
                     */
-                    raf.skipBytes(2);
-                    tmp.setName(raf.readUTF());
+                    source.skipBytes(2);
+                    tmp.setName(source.readUTF());
 
-                    tmp.setReleaseDate(Utility.convertToDate(raf.readUTF()));
+                    tmp.setReleaseDate(Utility.convertToDate(source.readUTF()));
 
                     /*
                     * Skipping 4 bytes for cleaning the String size for control
                     */
-                    raf.skipBytes(4);
-                    tmp.setOwners(raf.readUTF());
+                    source.skipBytes(4);
+                    tmp.setOwners(source.readUTF());
 
-                    tmp.setAge(raf.readInt());
-                    tmp.setPrice(raf.readDouble());
-                    tmp.setDlcs(raf.readInt());
+                    tmp.setAge(source.readInt());
+                    tmp.setPrice(source.readDouble());
+                    tmp.setDlcs(source.readInt());
 
                     /*
                     * Needs to skip 4 bytes for each String in vect
                     * for cleaning the String size for control
                     */
-                    int languagesSize = (int) raf.readShort();
+                    int languagesSize = (int) source.readShort();
                     String[] languages = new String[languagesSize];
                     for (int i = 0; i < languagesSize; i++) {
 
-                        raf.skipBytes(2);
-                        languages[i] = raf.readUTF();
+                        source.skipBytes(2);
+                        languages[i] = source.readUTF();
                     }
                     tmp.setLanguages(languages);
 
                     /*
                     * Skipping 2 bytes for string length
                     */
-                    raf.skipBytes(2);
-                    tmp.setWebsite(raf.readUTF());
+                    source.skipBytes(2);
+                    tmp.setWebsite(source.readUTF());
 
-                    tmp.setWindows(raf.readBoolean());
-                    tmp.setMac(raf.readBoolean());
-                    tmp.setLinux(raf.readBoolean());
-                    tmp.setUpVotes(raf.readInt());
-                    tmp.setAvgPT(raf.readInt());
+                    tmp.setWindows(source.readBoolean());
+                    tmp.setMac(source.readBoolean());
+                    tmp.setLinux(source.readBoolean());
+                    tmp.setUpVotes(source.readInt());
+                    tmp.setAvgPT(source.readInt());
 
                     /*
                     * Skipping 2 bytes for string length
                     */
-                    raf.skipBytes(2);
-                    tmp.setDevelopers(raf.readUTF());
+                    source.skipBytes(2);
+                    tmp.setDevelopers(source.readUTF());
 
                     /*
                     * Needs to skip 4 bytes for each String
                     * for cleaning the String size for control
                     */
-                    int genresSize = (int) raf.readShort();
+                    int genresSize = (int) source.readShort();
                     String[] genres = new String[genresSize];
                     for (int i = 0; i < genresSize; i++) {
 
-                        raf.skipBytes(2);
-                        genres[i] = raf.readUTF();
+                        source.skipBytes(2);
+                        genres[i] = source.readUTF();
                     }
                     tmp.setGenres(genres);
 
                     System.out.println("\n" + tmp);
 
-                } else { raf.seek(filePointer); raf.skipBytes(recordSize); }
+                } else { source.seek(filePointer); source.skipBytes(recordSize); }
             }
         }
     }
@@ -364,8 +364,8 @@ public abstract class Utility {
     /**
      * Method for transfer data from
      * one file to another.
-     * @param RandomAccessFile source -> source file that will be transfered.
-     * @param RandomAccessFile destination -> file that will receive transfered data.
+     * @param RandomAccessFile source -> source file that will be transferred.
+     * @param RandomAccessFile destination -> file that will receive transferred data.
     */
     public static void copyRemainingData(RandomAccessFile source, RandomAccessFile destination) throws IOException {
         while (!Utility.EOF(source)) { destination.write(source.read()); }
@@ -375,7 +375,7 @@ public abstract class Utility {
      * Method for copying content from a file with 
      * a header to another.
      * 
-     * @param RandomAccessFile source -> source that will be transfered
+     * @param RandomAccessFile source -> source that will be transferred
      * @param RandomAccessFile destination -> destination of transference
     */
     public static void copyFileContent(RandomAccessFile source, RandomAccessFile destination, boolean hasHeader) throws Exception {
@@ -474,9 +474,8 @@ public abstract class Utility {
      *
      * @param String binaryString -> binary string to be transformed
      */
-    public static char binaryToChar(String binaryString) {
-        int charCode = Integer.parseInt(binaryString, 2);
-        return (char) charCode;
+    public static char binaryToChar(char binaryChar) {
+        return (char) Integer.parseInt(Character.toString(binaryChar), 2);
     }
 
     /**

@@ -45,11 +45,13 @@ public class Prompt {
     private static RandomAccessFile hashRaf;
     private static RandomAccessFile invertedListRaf;
     private static RandomAccessFile lzwRaf;
+    private static RandomAccessFile huffmanRaf;
     private File sequentialFile;
     private File bTreeFile;
     private File hashFile;
     private File invertedListFile;
     private File lzwFile;
+    private File huffmanFile;
 
     /*
      * Application structures
@@ -75,12 +77,14 @@ public class Prompt {
         hashRaf = new RandomAccessFile("main/resources/hashFile.bin", "rw");
         invertedListRaf = new RandomAccessFile("main/resources/invertedlistFile.bin", "rw");
         lzwRaf = new RandomAccessFile("main/resources/lzwFile.bin", "rw");
+        huffmanRaf = new RandomAccessFile("main/resources/huffmanFile.bin", "rw");
 
         sequentialFile = new File("main/resources/sequentialFile.bin");
         bTreeFile = new File("main/resources/bTreeFile.bin");
         hashFile = new File("main/resources/hashFile.bin");
         invertedListFile = new File("main/resources/invertedlistFile.bin");
         lzwFile = new File("main/resources/lzwFile.bin");
+        huffmanFile = new File("main/resources/huffmanFile.bin");
 
         initiateStructures(source);
 
@@ -92,8 +96,7 @@ public class Prompt {
                 + "(1)-> Crud Operations\n"
                 + "(2)-> B Tree Operations\n"
                 + "(3)-> Hash Operations\n"
-                + "(4)-> InvetedList Operations\n\n"
-
+                + "(4)-> InvetedList Operations\n"
                 + "(5)-> Compression Operations\n"
                 + "(6)-> PatternMatching Operations\n\n"
 
@@ -294,6 +297,15 @@ public class Prompt {
                 System.out.println("Records from dataBase have already been loaded!");
 
                 int controlCase5 = -1;
+                boolean wasCompressed = false;
+
+                /*
+                 * Starting the compression files by transferring the main
+                 * binary file to the respective binary files of each compression algorithm.
+                */
+                Utility.transferFileContent(sequentialRaf, lzwRaf, true);
+                Utility.transferFileContent(sequentialRaf, huffmanRaf, true);
+
                 while (controlCase5 != 0) {
 
                     System.out.println(
@@ -336,20 +348,24 @@ public class Prompt {
                         break;
 
                         case 1:
-                            Utility.transferFileContent(sequentialRaf, lzwRaf, true);
                             System.out.println("\nSource file length in bytes: " + lzwRaf.length());
                             System.out.println("Compressing the source file...");
                             lzw.compression(lzwRaf);
                             System.out.println("\nCompressed!");
+                            wasCompressed = true;
                             System.out.println("New compressed file length in bytes: " + lzwRaf.length());
                         break;
 
                         case 2:
-                            System.out.println("\nCompressed File bytes length: " + lzwRaf.length());
-                            System.out.println("Decompressing the source file...");
-                            lzw.decompression(lzwRaf);
-                            System.out.println("\nDecompressed!");
-                            System.out.println("Original file bytes length: " + lzwRaf.length());
+                            if (wasCompressed) {
+                                System.out.println("\nCompressed File bytes length: " + lzwRaf.length());
+                                System.out.println("Decompressing the source file...");
+                                lzw.decompression(lzwRaf);
+                                System.out.println("\nDecompressed!");
+                                System.out.println("Original file bytes length: " + sequentialFile.length());
+                            } else {
+                                System.out.println("File wasn't compressed yet, try to compress and get back to decompression.");
+                            }
                         break;
 
                         case 3:

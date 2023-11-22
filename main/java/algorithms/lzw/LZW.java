@@ -84,7 +84,7 @@ public class LZW {
                         short prefixIndex = compMap.get(prefixSequence);
                         compLzwRaf.writeShort(prefixIndex);
 
-                        compMap.put(binarySequence, ++nextCodeAvaliableComp);
+                        compMap.put(binarySequence, nextCodeAvaliableComp++);
                         sequence = "";
                     }
                 } else {
@@ -119,34 +119,32 @@ public class LZW {
             source.seek(0);
             decompLzwRaf.seek(0);
 
-            short currentByte;
-            short lastIndex = 0;
-            String sequence = "";
-            String lastSequence = "";
+            short currentCode = (short)source.read();
+            StringBuilder currentSequence = new StringBuilder(decompMap.get(currentCode));
+            decompLzwRaf.writeBytes(currentSequence.toString());
 
-            currentByte = (short)source.read();
-            sequence += (char)currentByte;
+            while (source.getFilePointer() < source.length()) {
+                currentCode = (short)source.read();
 
-            if (decompMap.containsKey(Short.parseShort(sequence))) {
-                String s = Utility.binaryToString(decompMap.get(Short.parseShort(sequence)));
-                decompLzwRaf.write(Byte.parseByte(s));
+                if (nextCodeAvaliableDecomp < TABLE_MAX_LENGTH) {
+                    if (!decompMap.containsKey(currentCode)) {
+                        String sequence = currentSequence.toString() + currentSequence.charAt(0);
+                        decompMap.put(nextCodeAvaliableDecomp++, Utility.stringToBinary(sequence));
+                        decompLzwRaf.writeBytes(sequence);
 
-                lastSequence = sequence;
-                decompMap.put(++nextCodeAvaliableDecomp, (lastSequence += "?"));
-                lastIndex = nextCodeAvaliableDecomp;
+                        currentSequence = new StringBuilder(sequence);
+                    } else {
+                        String sequence = Utility.binaryToString(decompMap.get(currentCode));
+                        decompLzwRaf.writeBytes(sequence);
+                        currentSequence.append(sequence.charAt(0));
+                        decompMap.put(nextCodeAvaliableDecomp++, Utility.stringToBinary(currentSequence.toString()));
+
+                        currentSequence = new StringBuilder(Utility.stringToBinary(sequence));
+                    }
+                }
             }
 
-            sequence = "";
-            while ((currentByte = (short)source.read()) != -1) {
-                sequence += (char)currentByte;
-                lastSequence = lastSequence.substring(0, lastSequence.length()-1);
-                lastSequence += sequence;
-
-                decompMap.put(lastIndex, lastSequence);
-                lastSequence = sequence + "?";
-                decompMap.put(++nextCodeAvaliableDecomp, lastSequence);
-                lastIndex = nextCodeAvaliableDecomp;
-            }
+            Utility.transferFileContent(decompLzwRaf, source, false);
 
         } catch (Exception e) { e.printStackTrace(); }
     }
